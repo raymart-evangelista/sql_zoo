@@ -47,3 +47,13 @@ FROM route a JOIN route b ON
 WHERE stopa.name='Craiglockhart';
 
 -- 10 ?
+SELECT a.num, a.company, stopc.name, c.num, c.company
+FROM route a 
+JOIN route b ON (a.company=b.company AND a.num=b.num)
+JOIN (route c JOIN route d ON (c.company=d.company AND c.num=d.num))
+JOIN stops stopa ON (a.stop=stopa.id)
+JOIN stops stopb ON (b.stop=stopb.id)
+JOIN stops stopc ON (c.stop=stopc.id)
+JOIN stops stopd ON (d.stop=stopd.id)
+WHERE stopa.name='Craiglockhart' AND stopd.name='Lochend' AND stopb.name=stopc.name
+ORDER BY a.num, stopc.name;
