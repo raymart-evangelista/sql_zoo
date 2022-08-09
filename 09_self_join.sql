@@ -1,58 +1,49 @@
-SELECT yr, subject, winner
-FROM nobel
-WHERE yr = 1950;
+SELECT COUNT(id) FROM stops;
 
-SELECT winner
-FROM nobel
-WHERE yr = 1962
-AND subject = 'literature';
+SELECT id FROM stops WHERE name = 'Craiglockhart';
 
-SELECT yr, subject
-FROM nobel
-WHERE winner = 'Albert Einstein';
+SELECT stops.id, name FROM stops 
+JOIN route ON id = stop 
+WHERE company = 'LRT' and num = 4;
 
-SELECT winner
-FROM nobel
-WHERE yr >= 2000 AND subject LIKE '%peace%';
+SELECT company, num, COUNT(*)
+FROM route WHERE stop=149 OR stop=53
+GROUP BY company, num
+HAVING COUNT(*) = 2;
 
-SELECT *
-FROM nobel
-WHERE subject LIKE 'literature' AND yr BETWEEN 1980 AND 1989;
+SELECT a.company, a.num, a.stop, b.stop
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+WHERE a.stop=53 AND b.stop=149;
 
-SELECT *
-FROM nobel
-WHERE winner IN ('Theodore Roosevelt', 'Woodrow Wilson', 'Jimmy Carter', 'Barack Obama');
+SELECT a.company, a.num, stopa.name, stopb.name
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+WHERE stopa.name='Craiglockhart' AND stopb.name='London Road';
 
-SELECT winner
-FROM nobel
-WHERE winner LIKE ('John%');
+SELECT a.company, a.num
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+WHERE stopa.name='Haymarket' AND stopb.name='Leith'
+GROUP BY a.company, a.num;
 
-SELECT yr, subject, winner
-FROM nobel
-WHERE subject LIKE 'physics' AND yr = '1980' XOR subject LIKE 'chemistry' AND yr = '1984';
+SELECT a.company, a.num
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+WHERE stopa.name='Craiglockhart' AND stopb.name='Tollcross'
+GROUP BY a.company, a.num;
 
-SELECT yr, subject, winner
-FROM nobel
-WHERE yr = 1980 AND subject NOT IN ('medicine', 'chemistry');
+SELECT stopb.name, b.company, b.num
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+WHERE stopa.name='Craiglockhart';
 
-SELECT yr, subject, winner
-FROM nobel
-WHERE subject = 'medicine' AND yr < 1910 OR subject = 'literature' AND yr >= 2004;
-
-SELECT *
-FROM nobel
-WHERE winner LIKE 'PETER GR%';
-
-SELECT *
-FROM nobel
-WHERE winner LIKE "EUGENE O'NEILL";
-
-SELECT winner, yr, subject
-FROM nobel
-WHERE winner LIKE 'Sir%';
-ORDER BY yr DESC;
-
-SELECT winner, subject
-FROM nobel
-WHERE yr = 1984
-ORDER BY CASE WHEN subject IN ('chemistry', 'physics') THEN 1 ELSE 0 END, subject, winner;
+-- 10 ?
